@@ -1,4 +1,13 @@
 defmodule Advent.Day1 do
+  def find_revisit(heading, coords, directions) do
+    directions
+    |> String.split(", ", trim: true)
+    |> calc_moves(heading, coords)
+    |> elem(0)
+    |> Enum.reverse
+    |> IO.inspect
+  end
+
   def calculate(heading, coords, directions) do
     directions
     |> String.split(", ", trim: true)
@@ -8,7 +17,7 @@ defmodule Advent.Day1 do
     |> get_distance
   end
 
-  def get_distance(%{x: x, y: y}), do: abs(x) + abs(y)
+  def get_distance({x, y}), do: abs(x) + abs(y)
 
   def calc_moves([head | tail], heading, coords) do
     [direction, magnitude] = String.split(head, "", parts: 2)
@@ -22,24 +31,24 @@ defmodule Advent.Day1 do
 
   def calc_moves([], _, coords), do: {coords}
 
-  def update_location("e", magnitude, %{x: x, y: y}) do
+  def update_location("e", magnitude, {x, y}) do
     x+1..x+magnitude
-    |> Enum.reduce([], fn(i, acc) -> [ %{x: i, y: y} | acc] end)
+    |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
   end
 
-  def update_location("n", magnitude, %{x: x, y: y}) do
+  def update_location("n", magnitude, {x, y}) do
     y+1..y+magnitude
-    |> Enum.reduce([], fn(i, acc) -> [ %{x: x, y: i} | acc] end)
+    |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
   end
 
-  def update_location("w", magnitude, %{x: x, y: y}) do
+  def update_location("w", magnitude, {x, y}) do
     x-1..x-magnitude
-    |> Enum.reduce([], fn(i, acc) -> [ %{x: i, y: y} | acc] end)
+    |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
   end
 
-  def update_location("s", magnitude, %{x: x, y: y}) do
+  def update_location("s", magnitude, {x, y}) do
     y-1..y-magnitude
-    |> Enum.reduce([], fn(i, acc) -> [ %{x: x, y: i} | acc] end)
+    |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
   end
 
   def turn("n", "R"), do: "e"
