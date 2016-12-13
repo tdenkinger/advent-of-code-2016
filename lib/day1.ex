@@ -3,16 +3,14 @@ defmodule Advent.Day1 do
     directions
     |> String.split(", ", trim: true)
     |> calc_moves(heading, coords)
-    |> elem(0)
     |> Enum.reverse
     |> IO.inspect
   end
 
-  def calculate(heading, coords, directions) do
+  def calculate(heading, starting_location, directions) do
     directions
     |> String.split(", ", trim: true)
-    |> calc_moves(heading, coords)
-    |> elem(0)
+    |> calc_moves(heading, starting_location)
     |> List.first
     |> get_distance
   end
@@ -30,7 +28,7 @@ defmodule Advent.Day1 do
     calc_moves(tail, heading, path ++ visited)
   end
 
-  defp calc_moves([], _, coords), do: {coords}
+  defp calc_moves([], _, visited), do: visited
 
   defp get_path("e", magnitude, {x, y}) do
     x+1..x+magnitude |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
