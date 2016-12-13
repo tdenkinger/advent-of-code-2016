@@ -17,47 +17,44 @@ defmodule Advent.Day1 do
     |> get_distance
   end
 
-  def get_distance({x, y}), do: abs(x) + abs(y)
+  defp get_distance({x, y}), do: abs(x) + abs(y)
 
-  def calc_moves([head | tail], heading, coords) do
+  defp calc_moves([head | tail], heading, visited) do
     [direction, magnitude] = String.split(head, "", parts: 2)
-    heading = turn(heading, direction)
-    path    = update_location(heading,
-                              String.to_integer(magnitude),
-                              List.first(coords))
 
-    calc_moves(tail, heading, path ++ coords)
+    heading = make_turn(heading, direction)
+    path    = get_path(heading,
+                       String.to_integer(magnitude),
+                       List.first(visited))
+
+    calc_moves(tail, heading, path ++ visited)
   end
 
-  def calc_moves([], _, coords), do: {coords}
+  defp calc_moves([], _, coords), do: {coords}
 
-  def update_location("e", magnitude, {x, y}) do
-    x+1..x+magnitude
-    |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
+  defp get_path("e", magnitude, {x, y}) do
+    x+1..x+magnitude |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
   end
 
-  def update_location("n", magnitude, {x, y}) do
-    y+1..y+magnitude
-    |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
+  defp get_path("n", magnitude, {x, y}) do
+    y+1..y+magnitude |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
   end
 
-  def update_location("w", magnitude, {x, y}) do
-    x-1..x-magnitude
-    |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
+  defp get_path("w", magnitude, {x, y}) do
+    x-1..x-magnitude |> Enum.reduce([], fn(i, acc) -> [{i, y} | acc] end)
   end
 
-  def update_location("s", magnitude, {x, y}) do
-    y-1..y-magnitude
-    |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
+  defp get_path("s", magnitude, {x, y}) do
+    y-1..y-magnitude |> Enum.reduce([], fn(i, acc) -> [{x, i} | acc] end)
   end
 
-  def turn("n", "R"), do: "e"
-  def turn("n", "L"), do: "w"
-  def turn("e", "R"), do: "s"
-  def turn("e", "L"), do: "n"
-  def turn("s", "R"), do: "w"
-  def turn("s", "L"), do: "e"
-  def turn("w", "R"), do: "n"
-  def turn("w", "L"), do: "s"
+  defp make_turn("n", "R"), do: "e"
+  defp make_turn("n", "L"), do: "w"
+  defp make_turn("e", "R"), do: "s"
+  defp make_turn("e", "L"), do: "n"
+  defp make_turn("s", "R"), do: "w"
+  defp make_turn("s", "L"), do: "e"
+  defp make_turn("w", "R"), do: "n"
+  defp make_turn("w", "L"), do: "s"
 end
 
