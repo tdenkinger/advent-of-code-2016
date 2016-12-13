@@ -4,7 +4,8 @@ defmodule Advent.Day1 do
     |> String.split(", ", trim: true)
     |> calc_moves(heading, coords)
     |> Enum.reverse
-    |> IO.inspect
+    |> find_crossover_point
+    |> get_distance
   end
 
   def calculate(heading, starting_location, directions) do
@@ -13,6 +14,13 @@ defmodule Advent.Day1 do
     |> calc_moves(heading, starting_location)
     |> List.first
     |> get_distance
+  end
+
+  def find_crossover_point([head | tail]) do
+    case Enum.member?(tail, head) do
+      true -> head
+      _    -> find_crossover_point(tail)
+    end
   end
 
   defp get_distance({x, y}), do: abs(x) + abs(y)
