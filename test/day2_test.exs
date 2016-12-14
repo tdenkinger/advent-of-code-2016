@@ -3,9 +3,11 @@ defmodule Advent.Day2Test do
   alias Advent.Day2
 
   test "Gets simple code" do
-    assert Day2.door_code(8,
-                          ["ULL","RRDDD","LURDL","UUUUD"]
-                         ) == 5
+    assert Day2.door_code([], ["ULL","RRDDD","LURDL","UUUUD"], 5) == "1985"
+  end
+
+  test "Gets complex code" do
+    assert Day2.door_code([], Advent.Data.day2, 5) == "47978"
   end
 end
 

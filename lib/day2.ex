@@ -1,10 +1,23 @@
 defmodule Advent.Day2 do
-  def door_code(position, instructions) do
+  def door_code(positions, instructions, start) do
     instructions
-    |> String.split("", trim: :true)
-    |> Enum.reduce([position], fn(i, acc) -> [ make_move(List.first(acc), i) | acc]  end)
-    |> List.first
+    |> press_door_code(start, positions)
+    |> Enum.reduce([], fn(i, acc) -> [List.first(i) | acc] end)
+    |> Enum.join
   end
+
+  def press_door_code([key_presses | t], starting_position, positions) do
+    line = key_presses
+    |> String.split("", trim: :true)
+    |> Enum.reduce([starting_position],
+                   fn(i, acc) ->
+                     [ make_move(List.first(acc), i) | acc]
+                   end)
+
+    press_door_code(t, List.first(line), [line | positions])
+  end
+
+  def press_door_code([], _, presses), do: presses
 
   def make_move(1, dir) do
     case dir do
